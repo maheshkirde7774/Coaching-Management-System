@@ -1,0 +1,79 @@
+{% extends 'admin/base.html' %}
+{% block admin_content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-4 border-bottom">
+    <h2 class="fw-bold">{% if student %}Edit Student{% else %}Add Student{% endif %}</h2>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="{{ url_for('students.list_students') }}" class="btn btn-sm btn-secondary shadow-sm px-3 py-2">
+            <i class="bi bi-arrow-left me-1"></i> Back to List
+        </a>
+    </div>
+</div>
+
+<div class="card shadow-sm border-0">
+    <div class="card-body p-5">
+        <form method="POST">
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Full Name *</label>
+                    <input type="text" name="name" class="form-control form-control-lg bg-light" value="{{ student.name if student else '' }}" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Email Address *</label>
+                    <input type="email" name="email" class="form-control form-control-lg bg-light" value="{{ student.email if student else '' }}" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Phone Number *</label>
+                    <input type="tel" name="phone" class="form-control form-control-lg bg-light" value="{{ student.phone if student else '' }}" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Date of Birth *</label>
+                    <input type="date" name="dob" class="form-control form-control-lg bg-light" value="{{ student.dob.strftime('%Y-%m-%d') if student and student.dob else '' }}" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Gender</label>
+                    <select name="gender" class="form-select form-select-lg bg-light">
+                        <option value="Male" {% if student and student.gender == 'Male' %}selected{% endif %}>Male</option>
+                        <option value="Female" {% if student and student.gender == 'Female' %}selected{% endif %}>Female</option>
+                        <option value="Other" {% if student and student.gender == 'Other' %}selected{% endif %}>Other</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Course *</label>
+                    <select name="course_id" class="form-select form-select-lg bg-light" required>
+                        {% for c in courses %}
+                        <option value="{{ c.id }}" {% if student and student.course_id == c.id %}selected{% endif %}>{{ c.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Admission Date</label>
+                    <input type="date" name="admission_date" class="form-control form-control-lg bg-light" value="{{ student.admission_date.strftime('%Y-%m-%d') if student and student.admission_date else '' }}">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Status</label>
+                    <select name="status" class="form-select form-select-lg bg-light">
+                        <option value="Active" {% if student and student.status == 'Active' %}selected{% endif %}>Active</option>
+                        <option value="Inactive" {% if student and student.status == 'Inactive' %}selected{% endif %}>Inactive</option>
+                        <option value="Alumni" {% if student and student.status == 'Alumni' %}selected{% endif %}>Alumni</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Parent Name</label>
+                    <input type="text" name="parent_name" class="form-control form-control-lg bg-light" value="{{ student.parent_name if student else '' }}">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Parent Phone</label>
+                    <input type="tel" name="parent_phone" class="form-control form-control-lg bg-light" value="{{ student.parent_phone if student else '' }}">
+                </div>
+                <div class="col-12">
+                    <label class="form-label fw-bold">Address</label>
+                    <textarea name="address" class="form-control bg-light" rows="3">{{ student.address if student else '' }}</textarea>
+                </div>
+            </div>
+            <div class="mt-5 border-top pt-4 text-end">
+                <button type="submit" class="btn btn-primary btn-lg fw-bold px-5 shadow-sm">Save Student</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,130 @@
+{% extends 'admin/base.html' %}
+{% block admin_content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-4 border-bottom">
+    <h2 class="fw-bold">Dashboard</h2>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-xl-3 col-sm-6">
+        <div class="card bg-primary text-white h-100 shadow-sm border-0">
+            <div class="card-body">
+                <div class="d-flex justify-content-between px-md-1">
+                    <div>
+                        <h3 class="fw-bold text-white">{{ total_students }}</h3>
+                        <p class="mb-0 text-white-50">Total Students</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="bi bi-people-fill display-4 text-white-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-sm-6">
+        <div class="card bg-success text-white h-100 shadow-sm border-0">
+            <div class="card-body">
+                <div class="d-flex justify-content-between px-md-1">
+                    <div>
+                        <h3 class="fw-bold text-white">${{ total_fees_collected }}</h3>
+                        <p class="mb-0 text-white-50">Fees Collected</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="bi bi-cash-stack display-4 text-white-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-sm-6">
+        <div class="card bg-warning text-dark h-100 shadow-sm border-0">
+            <div class="card-body">
+                <div class="d-flex justify-content-between px-md-1">
+                    <div>
+                        <h3 class="fw-bold text-dark">{{ pending_admissions }}</h3>
+                        <p class="mb-0 text-dark-50">Pending Admissions</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="bi bi-file-earmark-text-fill display-4 text-dark-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-sm-6">
+        <div class="card bg-info text-white h-100 shadow-sm border-0">
+            <div class="card-body">
+                <div class="d-flex justify-content-between px-md-1">
+                    <div>
+                        <h3 class="fw-bold text-white">{{ todays_attendance }}</h3>
+                        <p class="mb-0 text-white-50">Today's Attendance</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="bi bi-calendar-check-fill display-4 text-white-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6 mb-4">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-header bg-white border-bottom pt-3 pb-2">
+                <h5 class="card-title fw-bold text-primary">Student Enrollment Trends</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="enrollmentChart" style="min-height: 300px;"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6 mb-4">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-header bg-white border-bottom pt-3 pb-2">
+                <h5 class="card-title fw-bold text-primary">Fee Collection Status</h5>
+            </div>
+            <div class="card-body d-flex justify-content-center">
+                <canvas id="feesChart" style="max-height: 300px;"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const ctx1 = document.getElementById('enrollmentChart').getContext('2d');
+        new Chart(ctx1, {
+            type: 'bar',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                datasets: [{
+                    label: 'New Enrollments',
+                    data: [12, 19, 3, 5, 2, 3],
+                    backgroundColor: 'rgba(13, 110, 253, 0.7)',
+                    borderColor: 'rgba(13, 110, 253, 1)',
+                    borderWidth: 1,
+                    borderRadius: 5
+                }]
+            },
+            options: { responsive: true, maintainAspectRatio: false }
+        });
+
+        const ctx2 = document.getElementById('feesChart').getContext('2d');
+        new Chart(ctx2, {
+            type: 'doughnut',
+            data: {
+                labels: ['Collected', 'Pending'],
+                datasets: [{
+                    data: [70, 30],
+                    backgroundColor: ['rgba(25, 135, 84, 0.8)', 'rgba(220, 53, 69, 0.8)'],
+                    borderWidth: 0,
+                    hoverOffset: 4
+                }]
+            },
+            options: { responsive: true, maintainAspectRatio: false }
+        });
+    });
+</script>
+{% endblock %}

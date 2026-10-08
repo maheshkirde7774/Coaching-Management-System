@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow border-0 rounded-lg">
+                <div class="card-header bg-primary text-white text-center py-4">
+                    <h3 class="mb-0 fw-bold">Admission Application</h3>
+                </div>
+                <div class="card-body p-5">
+                    {% if success %}
+                    <div class="text-center py-4">
+                        <i class="bi bi-check-circle-fill text-success" style="font-size: 5rem;"></i>
+                        <h2 class="mt-4 fw-bold text-dark">Application Submitted!</h2>
+                        <p class="lead text-muted">Your application has been received successfully.</p>
+                        <div class="alert alert-success d-inline-block mt-3 px-4 py-3 shadow-sm">
+                            <strong class="fs-5">Application ID: {{ app_id }}</strong>
+                        </div>
+                        <p class="text-muted mt-3">Please keep this ID for future reference. Our team will contact you soon.</p>
+                        <a href="{{ url_for('public.home') }}" class="btn btn-primary btn-lg mt-3 px-5">Return to Home</a>
+                    </div>
+                    {% else %}
+                    <form action="{{ url_for('public.admission') }}" method="POST" id="admissionForm" class="needs-validation" novalidate>
+                        <h5 class="mb-4 text-primary border-bottom pb-2 fw-bold">Personal Details</h5>
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Full Name <span class="text-danger">*</span></label>
+                                <input type="text" name="name" class="form-control form-control-lg bg-light" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Email Address <span class="text-danger">*</span></label>
+                                <input type="email" name="email" class="form-control form-control-lg bg-light" required>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Phone Number <span class="text-danger">*</span></label>
+                                <input type="tel" name="phone" class="form-control form-control-lg bg-light" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Date of Birth <span class="text-danger">*</span></label>
+                                <input type="date" name="dob" class="form-control form-control-lg bg-light" required>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Gender</label>
+                                <select name="gender" class="form-select form-select-lg bg-light">
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Course Applied For <span class="text-danger">*</span></label>
+                                <select name="course_id" class="form-select form-select-lg bg-light" required>
+                                    <option value="">Select a course...</option>
+                                    {% for c in courses %}
+                                    <option value="{{ c.id }}" {% if request.args.get('course_id') == c.id|string %}selected{% endif %}>{{ c.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <h5 class="mb-4 mt-5 text-primary border-bottom pb-2 fw-bold">Academic & Guardian Details</h5>
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Previous Qualification</label>
+                                <input type="text" name="previous_qualification" class="form-control form-control-lg bg-light">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Percentage / CGPA</label>
+                                <input type="number" step="0.01" name="percentage" class="form-control form-control-lg bg-light">
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Parent/Guardian Name</label>
+                                <input type="text" name="parent_name" class="form-control form-control-lg bg-light">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Parent/Guardian Phone</label>
+                                <input type="tel" name="parent_phone" class="form-control form-control-lg bg-light">
+                            </div>
+                        </div>
+                        <div class="mb-5">
+                            <label class="form-label fw-semibold">Full Address</label>
+                            <textarea name="address" class="form-control bg-light" rows="3"></textarea>
+                        </div>
+                        
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg fw-bold shadow-sm">Submit Application</button>
+                        </div>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

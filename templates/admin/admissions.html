@@ -1,0 +1,114 @@
+{% extends 'admin/base.html' %}
+{% block admin_content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-4 border-bottom">
+    <h2 class="fw-bold">Admissions</h2>
+</div>
+
+<div class="card shadow-sm border-0 mb-4">
+    <div class="card-body">
+        <form action="{{ url_for('admissions.list_admissions') }}" method="GET" class="row g-3">
+            <div class="col-md-10">
+                <div class="input-group input-group-lg">
+                    <span class="input-group-text bg-white"><i class="bi bi-search text-muted"></i></span>
+                    <input type="text" name="search" class="form-control bg-white" placeholder="Search applications by name..." value="{{ search }}">
+                </div>
+            </div>
+            <div class="col-md-2 d-grid">
+                <button type="submit" class="btn btn-primary btn-lg fw-bold">Search</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card shadow-sm border-0">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="ps-4">App ID</th>
+                        <th>Name</th>
+                        <th>Course</th>
+                        <th>Phone</th>
+                        <th>Applied On</th>
+                        <th>Status</th>
+                        <th class="text-end pe-4">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for admission in admissions %}
+                    <tr>
+                        <td class="ps-4"><span class="badge bg-secondary">{{ admission.application_id }}</span></td>
+                        <td class="fw-bold">{{ admission.name }}</td>
+                        <td>{{ admission.course_ref.name }}</td>
+                        <td>{{ admission.phone }}</td>
+                        <td>{{ admission.created_at.strftime('%Y-%m-%d') }}</td>
+                        <td>
+                            {% if admission.status == 'Approved' %}
+                            <span class="badge bg-success" id="status-{{ admission.id }}">Approved</span>
+                            {% elif admission.status == 'Rejected' %}
+                            <span class="badge bg-danger" id="status-{{ admission.id }}">Rejected</span>
+                            {% else %}
+                            <span class="badge bg-warning text-dark" id="status-{{ admission.id }}">Pending</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-end pe-4">
+                            <div class="dropdown">
+                                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                    Status
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><a class="dropdown-item text-success fw-bold" href="#" onclick="updateStatus({{ admission.id }}, 'Approved')"><i class="bi bi-check-circle me-2"></i>Approve</a></li>
+                                    <li><a class="dropdown-item text-danger fw-bold" href="#" onclick="updateStatus({{ admission.id }}, 'Rejected')"><i class="bi bi-x-circle me-2"></i>Reject</a></li>
+                                    <li><a class="dropdown-item text-warning fw-bold" href="#" onclick="updateStatus({{ admission.id }}, 'Pending')"><i class="bi bi-clock-history me-2"></i>Pending</a></li>
+                                </ul>
+                            </div>
+                            <button onclick="deleteAdmission({{ admission.id }})" class="btn btn-sm btn-outline-danger ms-1"><i class="bi bi-trash-fill"></i></button>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="7" class="text-center py-5 text-muted">
+                            <i class="bi bi-inbox display-4 d-block mb-3"></i>
+                            No applications found.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+function updateStatus(id, status) {
+    fetch(`/admin/admissions/update_status/${id}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: JSON.stringify({status: status})
+    }).then(res => res.json()).then(data => {
+        if(data.status === 'success') {
+            window.location.reload();
+        }
+    });
+}
+function deleteAdmission(id) {
+    if(confirm('Are you sure you want to delete this application?')) {
+        fetch(`/admin/admissions/delete/${id}`, {
+            method: 'POST',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        }).then(res => res.json()).then(data => {
+            if(data.status === 'success') {
+                window.location.reload();
+            }
+        });
+    }
+}
+</script>
+{% endblock %}
