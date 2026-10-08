@@ -59,3 +59,8 @@ cd coaching-management
 pip install -r requirements.txt
 python seed.py
 python app.py
+
+
+
+gor github
+cd .\coaching-management

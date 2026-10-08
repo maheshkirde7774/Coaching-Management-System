@@ -31,9 +31,9 @@
                     <tr>
                         <td class="ps-4 fw-bold">{{ stat.student.name }}</td>
                         <td>{{ stat.student.course_ref.name }}</td>
-                        <td>${{ stat.total }}</td>
-                        <td class="text-success fw-bold">${{ stat.paid }}</td>
-                        <td class="text-danger fw-bold">${{ stat.rem }}</td>
+                        <td>₹{{ stat.total }}</td>
+                        <td class="text-success fw-bold">₹{{ stat.paid }}</td>
+                        <td class="text-danger fw-bold">₹{{ stat.rem }}</td>
                         <td class="pe-4">
                             {% set percent = (stat.paid / stat.total * 100) if stat.total > 0 else 100 %}
                             <div class="progress" style="height: 10px;">
@@ -69,7 +69,7 @@
                     <tr>
                         <td class="ps-4">{{ fee.payment_date.strftime('%Y-%m-%d %H:%M') }}</td>
                         <td class="fw-bold">{{ fee.student_ref.name }}</td>
-                        <td class="text-success fw-bold">${{ fee.amount_paid }}</td>
+                        <td class="text-success fw-bold">₹{{ fee.amount_paid }}</td>
                         <td>{{ fee.payment_method }}</td>
                         <td>{{ fee.transaction_id or 'N/A' }}</td>
                         <td>

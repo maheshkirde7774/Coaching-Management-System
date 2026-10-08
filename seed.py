@@ -20,18 +20,24 @@ def seed():
             
         # Add Courses
         if not Course.query.first():
-            courses = [
-                Course(name='Web Development Bootcamp', description='Learn full-stack web development with Python and JavaScript.', duration='6 Months', fees=1500.00, eligibility='Basic programming knowledge', subjects='HTML, CSS, JS, Python, Flask'),
-                Course(name='Data Science Masterclass', description='Master data analysis and machine learning.', duration='8 Months', fees=2000.00, eligibility='Mathematics background', subjects='Python, Pandas, ML, AI'),
-                Course(name='UI/UX Design Course', description='Create stunning user interfaces.', duration='3 Months', fees=800.00, eligibility='Creative mindset', subjects='Figma, Adobe XD, Design Principles'),
-                Course(name='Cloud Computing with AWS', description='Prepare for AWS certifications.', duration='4 Months', fees=1200.00, eligibility='IT basics', subjects='AWS EC2, S3, RDS, Lambda'),
-                Course(name='Mobile App Development', description='Build apps for iOS and Android.', duration='5 Months', fees=1600.00, eligibility='Programming basics', subjects='Flutter, Dart, Firebase')
-            ]
+            courses = []
+            for standard in range(1, 13):
+                fees = 500.00 + (standard * 100) # Incremental fee based on standard
+                courses.append(
+                    Course(
+                        name=f'Standard {standard}', 
+                        description=f'Complete syllabus coverage for Standard {standard}.', 
+                        duration='1 Year', 
+                        fees=fees, 
+                        eligibility=f'Passed Standard {standard-1}' if standard > 1 else 'None', 
+                        subjects='Maths, Science, English, Social Studies'
+                    )
+                )
             db.session.add_all(courses)
             db.session.commit()
 
-        course1 = Course.query.filter_by(name='Web Development Bootcamp').first()
-        course2 = Course.query.filter_by(name='Data Science Masterclass').first()
+        course1 = Course.query.filter_by(name='Standard 1').first()
+        course2 = Course.query.filter_by(name='Standard 2').first()
         
         # Add Students
         if not Student.query.first():
