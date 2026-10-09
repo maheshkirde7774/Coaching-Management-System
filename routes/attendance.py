@@ -22,8 +22,9 @@ def list_attendance():
     students = []
     attendances = {}
     if course_id:
+        date_obj = datetime.strptime(date_str, '%Y-%m-%d').date()
         students = Student.query.filter_by(course_id=course_id, status='Active').all()
-        att_records = Attendance.query.filter_by(course_id=course_id, date=date_str).all()
+        att_records = Attendance.query.filter_by(course_id=course_id, date=date_obj).all()
         for a in att_records:
             attendances[a.student_id] = a.status
 
@@ -39,11 +40,13 @@ def mark_attendance():
     student_id = data.get('student_id')
     status = data.get('status')
     
-    att = Attendance.query.filter_by(course_id=course_id, date=date_str, student_id=student_id).first()
+    date_obj = datetime.strptime(date_str, '%Y-%m-%d').date()
+    
+    att = Attendance.query.filter_by(course_id=course_id, date=date_obj, student_id=student_id).first()
     if att:
         att.status = status
     else:
-        att = Attendance(course_id=course_id, date=date_str, student_id=student_id, status=status)
+        att = Attendance(course_id=course_id, date=date_obj, student_id=student_id, status=status)
         db.session.add(att)
     
     db.session.commit()

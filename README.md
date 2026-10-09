@@ -54,7 +54,7 @@ For Render/Railway, ensure to set `DATABASE_URL` and `SECRET_KEY` in the environ
 
 
 
-main cammands 
+main cammands gor app
 cd coaching-management
 pip install -r requirements.txt
 python seed.py
@@ -62,5 +62,9 @@ python app.py
 
 
 
-gor github
+for github
 cd .\coaching-management
+git status
+git add .
+git commit -m "Update coaching management system"
+git push origin main
